@@ -2,8 +2,10 @@ name: webdroid deploy
 
 on:
   push:
+    branches:
+      - main
     tags:
-      - '*'
+      - '*' 
 
 jobs:
   build:
