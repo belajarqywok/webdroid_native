@@ -31,18 +31,18 @@ jobs:
         cd $HOME/android-sdk/cmdline-tools
         wget https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip -O cmdline-tools.zip
         unzip cmdline-tools.zip
+
         mv tools latest 
         rm cmdline-tools.zip
         echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
-      
     - name: Accept Android SDK licenses
       run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
     - name: Install SDK platforms and build-tools
       run: |
-        sdkmanager "platforms;android-23" "build-tools;23.0.1"
+        sdkmanager "platforms;android-23" "build-tools;23.0.1" "build-tools;29.0.3"
       
     - name: Build APK
       run: |
@@ -61,8 +61,7 @@ jobs:
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
 
-        
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: app/build/outputs/apk/release/*.apk
+        files: app/build/outputs/apk/*-signed.apk
