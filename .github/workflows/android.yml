@@ -25,7 +25,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y lib32z1
         
-    - name: Setup Android SDK (Legacy)
+    - name: Setup Android SDK
       run: |
         mkdir -p $HOME/android-sdk/cmdline-tools
         cd $HOME/android-sdk/cmdline-tools
@@ -48,15 +48,19 @@ jobs:
       run: |
         chmod +x gradlew
         ./gradlew assembleRelease
+
+    - name: List APK outputs
+      run: ls -R app/build/outputs/apk
       
     - name: Sign APK
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: app/build/outputs/apk/release
+        releaseDirectory: app/build/outputs/apk
         signingKeyBase64: ${{ secrets.SIGNING_KEY }}
         alias: ${{ secrets.ALIAS }}
         keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
+
         
     - name: Create Release
       uses: softprops/action-gh-release@v1
