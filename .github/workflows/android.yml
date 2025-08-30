@@ -37,7 +37,7 @@ jobs:
 
     - name: Install SDK platforms and build-tools
       run: |
-        sdkmanager "platforms;android-23" "build-tools;23.0.3"
+        sdkmanager "platforms;android-23" "build-tools;23.0.1"
       
     - name: Build APK
       run: |
