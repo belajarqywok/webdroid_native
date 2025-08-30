@@ -52,14 +52,14 @@ jobs:
     - name: List APK outputs
       run: ls -R app/build/outputs/apk
       
-    - name: Sign APK
-      uses: r0adkll/sign-android-release@v1
-      with:
-        releaseDirectory: app/build/outputs/apk
-        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-        alias: ${{ secrets.ALIAS }}
-        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-        keyPassword: ${{ secrets.KEY_PASSWORD }}
+    # - name: Sign APK
+    #   uses: r0adkll/sign-android-release@v1
+    #   with:
+    #     releaseDirectory: app/build/outputs/apk
+    #     signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+    #     alias: ${{ secrets.ALIAS }}
+    #     keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+    #     keyPassword: ${{ secrets.KEY_PASSWORD }}
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
