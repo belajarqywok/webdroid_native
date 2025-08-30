@@ -27,7 +27,9 @@ jobs:
       run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
       
     - name: Build APK
-      run: ./gradlew assembleRelease
+      run: |
+        chmod +x gradlew
+        ./gradlew assembleRelease
       
     - name: Sign APK
       uses: r0adkll/sign-android-release@v1
