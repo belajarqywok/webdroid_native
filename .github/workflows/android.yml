@@ -64,4 +64,6 @@ jobs:
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        files: app/build/outputs/apk/*-signed.apk
+        tag_name: ${{ github.run_number }}
+        release_name: "Release: ${{ github.run_number }}"
+        files: app/build/outputs/apk/*.apk
