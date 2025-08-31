@@ -6,6 +6,9 @@ on:
       - main
     tags:
       - '*' 
+      
+permissions:
+  contents: write
 
 jobs:
   build:
