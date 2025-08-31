@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - '*'
+      - '*' 
       
 permissions:
   contents: write
@@ -17,12 +17,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    - name: Set up JDK 17
+    - name: Set up JDK 8
       uses: actions/setup-java@v3
       with:
-        java-version: '17'
+        java-version: '8'
         distribution: 'temurin'
-
 
     - name: Install required libraries
       run: |
@@ -33,20 +32,21 @@ jobs:
       run: |
         mkdir -p $HOME/android-sdk/cmdline-tools
         cd $HOME/android-sdk/cmdline-tools
-        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+        wget https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip -O cmdline-tools.zip
         unzip cmdline-tools.zip
-        mv cmdline-tools latest
+
+        mv tools latest 
         rm cmdline-tools.zip
         echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
     - name: Accept Android SDK licenses
-      run: yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+      run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
     - name: Install SDK platforms and build-tools
       run: |
-        sdkmanager "platforms;android-23" "build-tools;29.0.3"
-
+        sdkmanager "platforms;android-23" "build-tools;23.0.1" "build-tools;29.0.3"
+      
     - name: Build APK
       run: |
         chmod +x gradlew
@@ -55,18 +55,18 @@ jobs:
     - name: List APK outputs
       run: ls -R app/build/outputs/apk
       
-    - name: Sign APK
-      uses: r0adkll/sign-android-release@v1
-      with:
-        releaseDirectory: app/build/outputs/apk/release
-        signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-        alias: ${{ secrets.ALIAS }}
-        keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-        keyPassword: ${{ secrets.KEY_PASSWORD }}
+    # - name: Sign APK
+    #   uses: r0adkll/sign-android-release@v1
+    #   with:
+    #     releaseDirectory: app/build/outputs/apk
+    #     signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+    #     alias: ${{ secrets.ALIAS }}
+    #     keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+    #     keyPassword: ${{ secrets.KEY_PASSWORD }}
 
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v${{ github.run_number }}
-        name: "Release ${{ github.run_number }}"
-        files: app/build/outputs/apk/release/*-signed.apk
+        tag_name: deploy-test-${{ github.run_number }}
+        release_name: "Release: ${{ github.run_number }}"
+        files: app/build/outputs/apk/*.apk
